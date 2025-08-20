@@ -22,8 +22,11 @@ void printDirectory(File dir, int numTabs);
 
 
 void setup() {
-    Serial.begin(115200);
+
+   Serial.begin(115200);
+    pinMode(BUILTIN_LED, OUTPUT);
     SD_MMC.setPins(SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0);
+
     if (!SD_MMC.begin("/sdcard", true, true, SDMMC_FREQ_DEFAULT, 5)) {
       Serial.println("Card Mount Failed");
       return;
@@ -35,15 +38,21 @@ void setup() {
     }
 
     Serial.print("SD_MMC Card Type: ");
-    if(cardType == CARD_MMC){
-        Serial.println("MMC");
-    } else if(cardType == CARD_SD){
-        Serial.println("SDSC");
-    } else if(cardType == CARD_SDHC){
-        Serial.println("SDHC");
-    } else {
-        Serial.println("UNKNOWN");
-    }
+
+      switch (cardType) {
+         case CARD_MMC:
+            Serial.println("MMC");
+            break;
+         case CARD_SD:
+            Serial.println("SDSC");
+            break;
+         case CARD_SDHC:
+            Serial.println("SDHC");
+            break;
+         default:
+            Serial.println("UNKNOWN");
+            break;
+      }
 
     uint64_t cardSize = SD_MMC.cardSize() / (1024 * 1024);
     Serial.printf("SD_MMC Card Size: %lluMB\n", cardSize);
@@ -69,22 +78,24 @@ void setup() {
     Serial.printf("Total space: %lluMB\r\n", SD_MMC.totalBytes() / (1024 * 1024));
     Serial.printf("Used space: %lluMB\r\n", SD_MMC.usedBytes() / (1024 * 1024));
 
-    File dir = SD_MMC.open("/");
-    printDirectory(dir, 0);
+      File dir = SD_MMC.open("/");
+      digitalWrite(BUILTIN_LED, HIGH);
+      printDirectory(dir, 0);
+      digitalWrite(BUILTIN_LED, LOW);
 
     Serial.println("*finis*");
   }
 
-void loop() {
-  vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+  void loop() {
+
+   vTaskDelay(60000 / portTICK_PERIOD_MS);
 }
 
 
-
-
 void printDirectory(File dir, int numTabs) {
-   while (true) {
 
+   while (true) {
       File entry = dir.openNextFile();
       if (! entry) {
          // no more files
@@ -102,6 +113,7 @@ void printDirectory(File dir, int numTabs) {
          Serial.print("\t\t");
          Serial.println(entry.size(), DEC);
       }
+
       entry.close();
    }
 }
