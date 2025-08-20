@@ -99,6 +99,7 @@ void printDirectory(File dir, int numTabs) {
 
    while (true) {
       File entry = dir.openNextFile();
+
       if (! entry) {
          // no more files
          break;
@@ -107,6 +108,7 @@ void printDirectory(File dir, int numTabs) {
          Serial.print('\t');
       }
       Serial.print(entry.name());
+
       if (entry.isDirectory()) {
          Serial.println("/");
          printDirectory(entry, numTabs + 1);
