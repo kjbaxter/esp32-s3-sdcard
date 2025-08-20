@@ -24,20 +24,22 @@ void printDirectory(File dir, int numTabs);
 void setup() {
 
    Serial.begin(115200);
-    pinMode(BUILTIN_LED, OUTPUT);
-    SD_MMC.setPins(SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0);
+   pinMode(BUILTIN_LED, OUTPUT);
+   SD_MMC.setPins(SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0);
 
-    if (!SD_MMC.begin("/sdcard", true, true, SDMMC_FREQ_DEFAULT, 5)) {
+   if (!SD_MMC.begin("/sdcard", true, true, SDMMC_FREQ_DEFAULT, 5)) {
       Serial.println("Card Mount Failed");
       return;
-    }
+   }
+
     uint8_t cardType = SD_MMC.cardType();
-    if(cardType == CARD_NONE){
+
+   if (cardType == CARD_NONE) {
         Serial.println("No SD_MMC card attached");
         return;
     }
 
-    Serial.print("SD_MMC Card Type: ");
+      Serial.print("SD_MMC Card Type: ");
 
       switch (cardType) {
          case CARD_MMC:
@@ -54,36 +56,36 @@ void setup() {
             break;
       }
 
-    uint64_t cardSize = SD_MMC.cardSize() / (1024 * 1024);
-    Serial.printf("SD_MMC Card Size: %lluMB\n", cardSize);
+      uint64_t cardSize = SD_MMC.cardSize() / (1024 * 1024);
+      Serial.printf("SD_MMC Card Size: %lluMB\n", cardSize);
 
-    //listDir(SD_MMC, "/", 0);
+      //listDir(SD_MMC, "/", 0);
 
-    //createDir(SD_MMC, "/mydir");
-    //listDir(SD_MMC, "/", 0);
+      //createDir(SD_MMC, "/mydir");
+      //listDir(SD_MMC, "/", 0);
 
-    //removeDir(SD_MMC, "/mydir");
-    //listDir(SD_MMC, "/", 2);
+      //removeDir(SD_MMC, "/mydir");
+      //listDir(SD_MMC, "/", 2);
 
-    //writeFile(SD_MMC, "/hello.txt", "Hello ");
-    //appendFile(SD_MMC, "/hello.txt", "World!\n");
-    //readFile(SD_MMC, "/hello.txt");
+      //writeFile(SD_MMC, "/hello.txt", "Hello ");
+      //appendFile(SD_MMC, "/hello.txt", "World!\n");
+      //readFile(SD_MMC, "/hello.txt");
 
-    //deleteFile(SD_MMC, "/foo.txt");
-    //renameFile(SD_MMC, "/hello.txt", "/foo.txt");
-    //readFile(SD_MMC, "/foo.txt");
+      //deleteFile(SD_MMC, "/foo.txt");
+      //renameFile(SD_MMC, "/hello.txt", "/foo.txt");
+      //readFile(SD_MMC, "/foo.txt");
 
-    //testFileIO(SD_MMC, "/test.txt");
+      //testFileIO(SD_MMC, "/test.txt");
 
-    Serial.printf("Total space: %lluMB\r\n", SD_MMC.totalBytes() / (1024 * 1024));
-    Serial.printf("Used space: %lluMB\r\n", SD_MMC.usedBytes() / (1024 * 1024));
+      Serial.printf("Total space: %lluMB\r\n", SD_MMC.totalBytes() / (1024 * 1024));
+      Serial.printf("Used space: %lluMB\r\n", SD_MMC.usedBytes() / (1024 * 1024));
 
       File dir = SD_MMC.open("/");
       digitalWrite(BUILTIN_LED, HIGH);
       printDirectory(dir, 0);
       digitalWrite(BUILTIN_LED, LOW);
 
-    Serial.println("*finis*");
+      Serial.println("*finis*");
   }
 
 
