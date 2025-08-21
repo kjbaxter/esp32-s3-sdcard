@@ -81,9 +81,9 @@ void setup() {
       Serial.printf("Used space: %lluMB\r\n", SD_MMC.usedBytes() / (1024 * 1024));
 
       File dir = SD_MMC.open("/");
-      digitalWrite(BUILTIN_LED, HIGH);
+      //digitalWrite(BUILTIN_LED, HIGH);
       printDirectory(dir, 0);
-      digitalWrite(BUILTIN_LED, LOW);
+      //digitalWrite(BUILTIN_LED, LOW);
 
       Serial.println("*finis*");
   }
